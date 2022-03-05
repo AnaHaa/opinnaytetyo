@@ -1,0 +1,10 @@
+{
+  "name": "oop",
+  "version": "1.0.0",
+  "description": "Object-oriented REST API",
+  "scripts": {
+    "start": "tsc && node ./build/index.js"
+  },
+  "author": "Antti Haarala",
+  "license": "MIT"
+}
