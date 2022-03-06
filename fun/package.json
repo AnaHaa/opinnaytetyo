@@ -6,5 +6,11 @@
     "start": "tsc && node ./build/index.js"
   },
   "author": "Antti Haarala",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13"
+  }
 }
