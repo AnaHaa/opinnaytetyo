@@ -3,7 +3,7 @@ const mongoDB = require('mongodb');
 const dotenv = require('dotenv');
 
 /**
- * Luo MongoDB Tietokantaan 10 000 erilaista henkilöä
+ * Luo MongoDB Tietokantaan 1 000 000 erilaista henkilöä
  * Tarkoitettu opinnäytetyön rajapintojen testaukseen
  */
 async function createFakeData() {
@@ -24,9 +24,9 @@ async function createFakeData() {
 
     const fakePeople = [];
 
-    // Luo 10 000 erilaista feikkihenkilöä
+    // Luo 1 000 000 erilaista feikkihenkilöä
     // joilla on nimi ja sähköposti
-    for (let i = 0; i < 10000; i++) {
+    for (let i = 0; i < 1000000; i++) {
         fakePeople.push({
             name: faker.name.findName(),
             email: faker.internet.email()
@@ -34,11 +34,9 @@ async function createFakeData() {
     }
 
     // Työnnä feikkihenkilöt tietokantaan
-    return await itemsCollection.insertMany(fakePeople);
+    const result = await itemsCollection.insertMany(fakePeople);
+    console.log(result);
 }
 
 // Suorita funktio
-createFakeData().then(
-    console.log('Documents inserted'),
-    process.exit()
-);
+createFakeData();
