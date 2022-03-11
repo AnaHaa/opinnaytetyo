@@ -10,14 +10,12 @@ import { getAllOperation, getOneOperation } from './mongo_functions/queryFunctio
  */
 export async function fetchData(req: Request, res: Response) {
     try {
-        let result: Data[];
-
         if (req.query._id) {
-            result = await getOneOperation(queryDatabase, req.query._id as string);
-        } else {
-            result = await getAllOperation(queryDatabase);
+            const result = await getOneOperation(queryDatabase, req.query._id as string);
+            result ? res.status(200).send(result) : res.status(404).send('Not found');
         }
 
+        const result = await getAllOperation(queryDatabase);
         result ? res.status(200).send(result) : res.status(404).send('Not found');
     } catch (err) {
         res.status(404).send('Not found');

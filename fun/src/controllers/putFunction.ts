@@ -10,15 +10,14 @@ import { createOperation, updateOperation } from "./mongo_functions/queryFunctio
  */
 export async function putData(req: Request, res: Response) {
     try {
-        let result: Data[];
         const body = req.body as Data;
 
         if (!body._id) {
-            result = await createOperation(queryDatabase, body);
-        } else {
-            result = await updateOperation(queryDatabase, body);
+            const result = await createOperation(queryDatabase, body);
+            result ? res.status(201).send(result) : res.status(404).send('Not found');
         }
-
+        
+        const result = await updateOperation(queryDatabase, body);
         result ? res.status(201).send(result) : res.status(404).send('Not found');
     } catch (err) {
         console.log(err);
