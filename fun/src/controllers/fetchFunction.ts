@@ -1,10 +1,25 @@
-import { Data } from "../interfaces/data";
-import { getAllOperation, getOneOperation } from "./mongo_functions";
+import { Request, Response } from 'express';
+import { Data } from '../interfaces/data';
+import { queryDatabase } from "./mongo_functions/connectFunctions";
+import { getAllOperation, getOneOperation } from './mongo_functions/queryFunctions';
 
 /**
- * d
- * d
+ * Fetch päätepiste
+ * Hyödyntää higher-order ja callback funktioita
+ * Hakee kaikki tai yhden dokumentin tietokannasta
  */
-export function fetchData(id?: string) {
-    return '';
+export async function fetchData(req: Request, res: Response) {
+    try {
+        let result: Data[];
+
+        if (req.query._id) {
+            result = await getOneOperation(queryDatabase, req.query._id as string);
+        } else {
+            result = await getAllOperation(queryDatabase);
+        }
+
+        result ? res.status(200).send(result) : res.status(404).send('Not found');
+    } catch (err) {
+        res.status(404).send('Not found');
+    }
 }
