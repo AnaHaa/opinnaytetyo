@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
-import { Data } from '../interfaces/data';
 import { queryDatabase } from "./mongo_functions/connectFunctions";
 import { getAllOperation, getOneOperation } from './mongo_functions/queryFunctions';
 
 /**
- * Fetch päätepiste
+ * Get päätepiste
  * Hyödyntää higher-order ja callback funktioita
  * Hakee kaikki tai yhden dokumentin tietokannasta
  */

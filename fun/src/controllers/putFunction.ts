@@ -4,7 +4,7 @@ import { queryDatabase } from "./mongo_functions/connectFunctions";
 import { createOperation, updateOperation } from "./mongo_functions/queryFunctions";
 
 /**
- * Delete päätepiste
+ * Put päätepiste
  * Hyödyntää higher-order ja callback funktioita
  * Luo tai päivittää yhden dokumentin tietokannasta
  */
