@@ -18,11 +18,11 @@ const itemController = new ItemController();
 // Päätepiste get
 app.get('/items', itemController.getAllItems);
 
-// Päätepiste get, jossa on parametri id
+// Päätepiste get
 app.get('/item', itemController.getItem);
 
 // Päätepiste post
 app.post('/item', itemController.insertItem);
 
-// Päätepiste delete, jossa on parametri id
+// Päätepiste delete
 app.delete('/item', itemController.deleteItem);
