@@ -1,24 +1,27 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-import { fetchData } from './controllers/fetchFunction';
-import { putData } from './controllers/putFunction';
-import { deleteData } from './controllers/deleteFunction';
+import { getAllItems, getItem } from './controllers/getFunction';
+import { insertItem } from './controllers/postFunction';
+import { deleteItem } from './controllers/deleteFunction';
 
 // Luodaan express prosessi
 const app = express();
 const port = process.env.PORT || 3000;
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Asetetaan prosessille portti
 app.listen(port, () => {
   console.log(`Running on port ${port}.`);
 });
 
-// Päätepiste get, jossa on valinnainen parametri
-app.get('/items:id?', fetchData);
+// Päätepiste get
+app.get('/items', getAllItems);
 
-// Päätepiste put
-app.put('/items', putData);
+// Päätepiste get
+app.get('/item', getItem);
 
-// Päätepiste delete, jossa on pakollinen parametri
-app.delete('/items:id?', deleteData);
+// Päätepiste post
+app.post('/item', insertItem);
+
+// Päätepiste delete
+app.delete('/item', deleteItem);

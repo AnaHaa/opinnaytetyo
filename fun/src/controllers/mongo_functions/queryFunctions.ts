@@ -1,83 +1,80 @@
-import { Data } from "../../interfaces/data";
+import { Item } from "../../interfaces/data";
 import { ObjectId } from "mongodb";
 import * as mongoDB from "mongodb";
+import * as dotenv from "dotenv";
 
 /**
  * Higher-order funktio
  * Hyödyntää queryDatabase funktiota
  * Hakee kaikki dokumentit tietokannasta
  */
-export async function getAllOperation(connect: () => Promise<mongoDB.Collection>): Promise<Data[]> {
-    const collection = await connect();
-    return (await collection.find({}).toArray()) as Data[];
+export async function getAllOperation(connect: (COLLECTION_NAME: string, DB_CONN_STRING: string, DB_NAME: string) => Promise<mongoDB.Collection>): Promise<Item[]> {
+    dotenv.config();
+    const collection = await connect(
+        process.env.COLLECTION_NAME ? process.env.COLLECTION_NAME : '',
+        process.env.DB_CONN_STRING ? process.env.DB_CONN_STRING : '',
+        process.env.DB_NAME ? process.env.DB_NAME : '',
+    );
+
+    return await collection.find({}).toArray() as Item[];
 }
 
 /**
  * Higher-order funktio, joka hyödyntää queryDatabase funktiota
- * Hakee yhden dokumentin tietokannasta
+ * Hakee yhden dokumentin tietokannasta _id parametrin avulla
  */
-export async function getOneOperation(connect: () => Promise<mongoDB.Collection>, _id: string): Promise<Data[]> {
-    const collection = await connect();
+export async function getOneOperation(connect: (COLLECTION_NAME: string, DB_CONN_STRING: string, DB_NAME: string) => Promise<mongoDB.Collection>, _id: string): Promise<Item> {
+    dotenv.config();
+    const collection = await connect(
+        process.env.COLLECTION_NAME ? process.env.COLLECTION_NAME : '',
+        process.env.DB_CONN_STRING ? process.env.DB_CONN_STRING : '',
+        process.env.DB_NAME ? process.env.DB_NAME : '',
+    );
+
     const findQuery = { _id: new ObjectId(_id) };
-
-    const result = (await collection.findOne(findQuery)) as Data;
-
-    if (result) {
-        return [result];
-    }
-
-    throw mongoDB.MongoError;
+    const item = await collection.findOne(findQuery) as Item;
+    return item;
 }
 
 /**
  * Higher-order funktio, joka hyödyntää queryDatabase funktiota
  * Luo yhden dokumentin tietokantaan
  */
-export async function createOperation(connect: () => Promise<mongoDB.Collection>, _object: Data): Promise<Data[]> {
-    const collection = await connect();
+export async function createOperation(connect: (COLLECTION_NAME: string, DB_CONN_STRING: string, DB_NAME: string) => Promise<mongoDB.Collection>, _object: Item): Promise<boolean> {
+    dotenv.config();
+    const collection = await connect(
+        process.env.COLLECTION_NAME ? process.env.COLLECTION_NAME : '',
+        process.env.DB_CONN_STRING ? process.env.DB_CONN_STRING : '',
+        process.env.DB_NAME ? process.env.DB_NAME : '',
+    );
+
     const result = await collection.insertOne(_object);
 
-    if (result) {
-        return [_object];
+    if (result.acknowledged) {
+        return true;
     }
 
-    throw mongoDB.MongoError;
-}
-
-/**
- * Higher-order funktio, joka hyödyntää queryDatabase funktiota
- * Päivittää yhden olemassa olevan dokumentin tietokannasta
- */
-export async function updateOperation(connect: () => Promise<mongoDB.Collection>, _object: Data): Promise<Data[]> {
-    const collection = await connect();
-    const findQuery = { _id: new ObjectId(_object._id) };
-
-    const result = await collection.updateOne(findQuery, { $set: {
-        name: _object.name,
-        email: _object.email
-    } });
-
-    if (result.modifiedCount) {
-        return [_object];
-    }
-
-    throw mongoDB.MongoError;
+    return false;
 }
 
 /**
  * Higher-order funktio, joka hyödyntää queryDatabase funktiota
  * Poistaa yhden olemassa olevan dokumentin tietokannasta
  */
-export async function deleteOperation(connect: () => Promise<mongoDB.Collection>, _id: string): Promise<Data[]> {
-    const collection = await connect();
+export async function deleteOperation(connect: (COLLECTION_NAME: string, DB_CONN_STRING: string, DB_NAME: string) => Promise<mongoDB.Collection>, _id: string): Promise<boolean> {
+    dotenv.config();
+    const collection = await connect(
+        process.env.COLLECTION_NAME ? process.env.COLLECTION_NAME : '',
+        process.env.DB_CONN_STRING ? process.env.DB_CONN_STRING : '',
+        process.env.DB_NAME ? process.env.DB_NAME : '',
+    );
+
     const findQuery = { _id: new ObjectId(_id) };
+    const result = await collection.deleteOne(findQuery);
 
-    const result = (await collection.findOne(findQuery)) as Data;
-
-    if (result) {
-        collection.deleteOne(findQuery);
-        return [result];
+    if (result.acknowledged) {
+        return true;
     }
 
-    throw mongoDB.MongoError;
+    return false;
 }

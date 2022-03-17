@@ -19,9 +19,9 @@ export interface ItemInterface {
 }
 
 export interface MongoInterface {
-    collection: mongoDB.Collection
+    collection: mongoDB.Collection;
     client: mongoDB.MongoClient;
-    db: mongoDB.Db
+    db: mongoDB.Db;
     fetchAllDocuments(): Promise<Document[]>;
     fetchDocument(_id: string): Promise<Document>;
     insertDocument(_object: Object): Promise<boolean>;

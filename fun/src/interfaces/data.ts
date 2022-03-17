@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 
-export interface Data {
+export type Item = {
     _id?: ObjectId,
     name: string,
     email: string
